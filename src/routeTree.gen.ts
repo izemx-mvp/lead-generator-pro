@@ -9,38 +9,188 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as ParametresRouteImport } from './routes/parametres'
+import { Route as LoginRouteImport } from './routes/login'
+import { Route as LeadsRouteImport } from './routes/leads'
+import { Route as ImportRouteImport } from './routes/import'
+import { Route as ConfigurationRouteImport } from './routes/configuration'
+import { Route as CampagnesRouteImport } from './routes/campagnes'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as ProspectsIndexRouteImport } from './routes/prospects.index'
+import { Route as ProspectsIdRouteImport } from './routes/prospects.$id'
 
+const ParametresRoute = ParametresRouteImport.update({
+  id: '/parametres',
+  path: '/parametres',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const LoginRoute = LoginRouteImport.update({
+  id: '/login',
+  path: '/login',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const LeadsRoute = LeadsRouteImport.update({
+  id: '/leads',
+  path: '/leads',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ImportRoute = ImportRouteImport.update({
+  id: '/import',
+  path: '/import',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ConfigurationRoute = ConfigurationRouteImport.update({
+  id: '/configuration',
+  path: '/configuration',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const CampagnesRoute = CampagnesRouteImport.update({
+  id: '/campagnes',
+  path: '/campagnes',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ProspectsIndexRoute = ProspectsIndexRouteImport.update({
+  id: '/prospects/',
+  path: '/prospects/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ProspectsIdRoute = ProspectsIdRouteImport.update({
+  id: '/prospects/$id',
+  path: '/prospects/$id',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/campagnes': typeof CampagnesRoute
+  '/configuration': typeof ConfigurationRoute
+  '/import': typeof ImportRoute
+  '/leads': typeof LeadsRoute
+  '/login': typeof LoginRoute
+  '/parametres': typeof ParametresRoute
+  '/prospects/$id': typeof ProspectsIdRoute
+  '/prospects/': typeof ProspectsIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/campagnes': typeof CampagnesRoute
+  '/configuration': typeof ConfigurationRoute
+  '/import': typeof ImportRoute
+  '/leads': typeof LeadsRoute
+  '/login': typeof LoginRoute
+  '/parametres': typeof ParametresRoute
+  '/prospects/$id': typeof ProspectsIdRoute
+  '/prospects': typeof ProspectsIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/campagnes': typeof CampagnesRoute
+  '/configuration': typeof ConfigurationRoute
+  '/import': typeof ImportRoute
+  '/leads': typeof LeadsRoute
+  '/login': typeof LoginRoute
+  '/parametres': typeof ParametresRoute
+  '/prospects/$id': typeof ProspectsIdRoute
+  '/prospects/': typeof ProspectsIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/'
+  fullPaths:
+    | '/'
+    | '/campagnes'
+    | '/configuration'
+    | '/import'
+    | '/leads'
+    | '/login'
+    | '/parametres'
+    | '/prospects/$id'
+    | '/prospects/'
   fileRoutesByTo: FileRoutesByTo
-  to: '/'
-  id: '__root__' | '/'
+  to:
+    | '/'
+    | '/campagnes'
+    | '/configuration'
+    | '/import'
+    | '/leads'
+    | '/login'
+    | '/parametres'
+    | '/prospects/$id'
+    | '/prospects'
+  id:
+    | '__root__'
+    | '/'
+    | '/campagnes'
+    | '/configuration'
+    | '/import'
+    | '/leads'
+    | '/login'
+    | '/parametres'
+    | '/prospects/$id'
+    | '/prospects/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  CampagnesRoute: typeof CampagnesRoute
+  ConfigurationRoute: typeof ConfigurationRoute
+  ImportRoute: typeof ImportRoute
+  LeadsRoute: typeof LeadsRoute
+  LoginRoute: typeof LoginRoute
+  ParametresRoute: typeof ParametresRoute
+  ProspectsIdRoute: typeof ProspectsIdRoute
+  ProspectsIndexRoute: typeof ProspectsIndexRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/parametres': {
+      id: '/parametres'
+      path: '/parametres'
+      fullPath: '/parametres'
+      preLoaderRoute: typeof ParametresRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/login': {
+      id: '/login'
+      path: '/login'
+      fullPath: '/login'
+      preLoaderRoute: typeof LoginRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/leads': {
+      id: '/leads'
+      path: '/leads'
+      fullPath: '/leads'
+      preLoaderRoute: typeof LeadsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/import': {
+      id: '/import'
+      path: '/import'
+      fullPath: '/import'
+      preLoaderRoute: typeof ImportRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/configuration': {
+      id: '/configuration'
+      path: '/configuration'
+      fullPath: '/configuration'
+      preLoaderRoute: typeof ConfigurationRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/campagnes': {
+      id: '/campagnes'
+      path: '/campagnes'
+      fullPath: '/campagnes'
+      preLoaderRoute: typeof CampagnesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/': {
       id: '/'
       path: '/'
@@ -48,22 +198,34 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/prospects/': {
+      id: '/prospects/'
+      path: '/prospects'
+      fullPath: '/prospects/'
+      preLoaderRoute: typeof ProspectsIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/prospects/$id': {
+      id: '/prospects/$id'
+      path: '/prospects/$id'
+      fullPath: '/prospects/$id'
+      preLoaderRoute: typeof ProspectsIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  CampagnesRoute: CampagnesRoute,
+  ConfigurationRoute: ConfigurationRoute,
+  ImportRoute: ImportRoute,
+  LeadsRoute: LeadsRoute,
+  LoginRoute: LoginRoute,
+  ParametresRoute: ParametresRoute,
+  ProspectsIdRoute: ProspectsIdRoute,
+  ProspectsIndexRoute: ProspectsIndexRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
-
-import type { getRouter } from './router.tsx'
-import type { startInstance } from './start.ts'
-declare module '@tanstack/react-start' {
-  interface Register {
-    ssr: true
-    router: Awaited<ReturnType<typeof getRouter>>
-    config: Awaited<ReturnType<typeof startInstance.getOptions>>
-  }
-}
