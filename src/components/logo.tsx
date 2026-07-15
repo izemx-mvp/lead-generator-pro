@@ -12,9 +12,16 @@ export function Logo({ size = 36, withText = true }: { size?: number; withText?:
             <stop offset="1" stopColor="oklch(0.7 0.14 65)" />
           </linearGradient>
         </defs>
+        {/* Rounded tile background */}
         <rect x="2" y="2" width="44" height="44" rx="12" fill="url(#lg-primary)" />
-        <path d="M13 34V14h4.2l6.8 12.4L30.8 14H35v20h-4V22.2l-5.4 9.6h-3.2L17 22.2V34h-4z" fill="url(#lg-gold)" />
-        <circle cx="38" cy="10" r="3" fill="url(#lg-gold)" />
+        {/* Abstract building / signal mark: three ascending bars behind a roof arch */}
+        <rect x="12" y="26" width="4" height="10" rx="1.2" fill="url(#lg-gold)" opacity="0.55" />
+        <rect x="18" y="22" width="4" height="14" rx="1.2" fill="url(#lg-gold)" opacity="0.75" />
+        <rect x="24" y="18" width="4" height="18" rx="1.2" fill="url(#lg-gold)" />
+        {/* Roof / apex line */}
+        <path d="M10 20 L26 10 L38 18" stroke="url(#lg-gold)" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" fill="none" />
+        {/* AI signal dot */}
+        <circle cx="38" cy="18" r="2.4" fill="url(#lg-gold)" />
       </svg>
       {withText && (
         <div className="leading-tight">
