@@ -4,8 +4,10 @@ import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
-import { campagnes } from "@/lib/mock-data";
-import { Rocket, Pause, Play, Users, MessageSquare, Flame } from "lucide-react";
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import { campagnes, prospects, statutLabels, statutColors, type Campagne } from "@/lib/mock-data";
+import { Rocket, Pause, Play, Users, MessageSquare, Flame, CalendarClock } from "lucide-react";
+import { useState } from "react";
 
 export const Route = createFileRoute("/campagnes")({
   head: () => ({ meta: [{ title: "Campagnes IA — Naïma AI" }] }),
@@ -19,6 +21,8 @@ const statutMap: Record<string, { label: string; className: string; icon: React.
 };
 
 function CampagnesPage() {
+  const [selected, setSelected] = useState<Campagne | null>(null);
+
   return (
     <AppShell title="Campagnes IA" subtitle="Suivi en temps réel des campagnes de prospection automatisée">
       <div className="grid gap-4">
@@ -38,7 +42,7 @@ function CampagnesPage() {
                   </p>
                 </div>
                 <div className="flex gap-2">
-                  <Button variant="outline" size="sm">Détails</Button>
+                  <Button variant="outline" size="sm" onClick={() => setSelected(c)}>Détails</Button>
                   {c.statut === "active" ? <Button variant="outline" size="sm"><Pause className="h-3 w-3 mr-1" /> Suspendre</Button> :
                    c.statut === "pause" ? <Button size="sm"><Play className="h-3 w-3 mr-1" /> Reprendre</Button> : null}
                 </div>
@@ -62,6 +66,52 @@ function CampagnesPage() {
           );
         })}
       </div>
+
+      <Dialog open={!!selected} onOpenChange={(o) => !o && setSelected(null)}>
+        <DialogContent className="max-w-2xl">
+          {selected && (
+            <>
+              <DialogHeader>
+                <DialogTitle className="font-display text-xl">{selected.nom}</DialogTitle>
+                <DialogDescription className="flex items-center gap-1.5 text-xs">
+                  <CalendarClock className="h-3 w-3" />
+                  Importée le {new Date(selected.dateImport).toLocaleDateString("fr-FR", { day: "2-digit", month: "long", year: "numeric" })}
+                </DialogDescription>
+              </DialogHeader>
+
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-3 mt-2">
+                <Metric icon={Users} label="Prospects" value={selected.nbProspects} />
+                <Metric icon={MessageSquare} label="Envoyés" value={selected.envoyes} />
+                <Metric icon={MessageSquare} label="Réponses" value={selected.reponses} tone="chart-2" />
+                <Metric icon={Flame} label="Qualifiés" value={selected.qualifies} tone="success" />
+              </div>
+
+              <div>
+                <h4 className="font-display font-semibold text-sm mb-2 mt-2">Prospects de la campagne</h4>
+                <div className="max-h-72 overflow-auto rounded-lg border border-border/60">
+                  {prospects.filter((p) => p.campagneId === selected.id).map((p) => (
+                    <div key={p.id} className="flex items-center justify-between p-3 border-b border-border/40 last:border-0">
+                      <div className="flex items-center gap-2">
+                        <div className="h-8 w-8 rounded-full bg-primary/10 text-primary text-[10px] font-semibold flex items-center justify-center">
+                          {p.prenom[0]}{p.nom[0]}
+                        </div>
+                        <div>
+                          <div className="text-sm font-medium">{p.prenom} {p.nom}</div>
+                          <div className="text-xs text-muted-foreground">{p.ville}, {p.pays}</div>
+                        </div>
+                      </div>
+                      <Badge className={statutColors[p.statut]}>{statutLabels[p.statut]}</Badge>
+                    </div>
+                  ))}
+                  {prospects.filter((p) => p.campagneId === selected.id).length === 0 && (
+                    <div className="text-center text-sm text-muted-foreground py-6">Aucun prospect rattaché.</div>
+                  )}
+                </div>
+              </div>
+            </>
+          )}
+        </DialogContent>
+      </Dialog>
     </AppShell>
   );
 }

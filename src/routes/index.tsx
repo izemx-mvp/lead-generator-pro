@@ -3,7 +3,7 @@ import { AppShell } from "@/components/app-shell";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { prospects, campagnes, serieActivite, leadsQualifies } from "@/lib/mock-data";
+import { prospects, campagnes, serieActivite } from "@/lib/mock-data";
 import { Area, AreaChart, CartesianGrid, ResponsiveContainer, Tooltip, XAxis, YAxis, PieChart, Pie, Cell, Legend } from "recharts";
 import { ArrowUpRight, MessageSquare, Send, Flame, Users, Sparkles, MessagesSquare } from "lucide-react";
 
@@ -17,11 +17,13 @@ function DashboardPage() {
   const totalReponses = campagnes.reduce((s, c) => s + c.reponses, 0);
   const tauxReponse = Math.round((totalReponses / Math.max(1, totalEnvoyes)) * 100);
 
+  const leadsQualifiesCount = prospects.filter((p) => p.statut === "qualifie").length;
+
   const kpis = [
     { label: "Prospects importés", value: prospects.length, hint: "+12 cette semaine", icon: Users, tone: "primary" },
     { label: "Messages envoyés", value: totalEnvoyes, hint: `${totalReponses} réponses`, icon: Send, tone: "chart-1" },
     { label: "Taux de réponse", value: `${tauxReponse}%`, hint: "Moyenne 30 jours", icon: MessageSquare, tone: "chart-2" },
-    { label: "Leads chauds", value: leadsQualifies.length, hint: "Prêts à revendre", icon: Flame, tone: "success" },
+    { label: "Leads chauds", value: leadsQualifiesCount, hint: "Prêts à revendre", icon: Flame, tone: "success" },
   ];
 
   const canalData = [
@@ -141,7 +143,7 @@ function DashboardPage() {
           <p className="text-xs text-muted-foreground mb-4">Lancez une nouvelle campagne en quelques clics.</p>
           <div className="space-y-2 flex-1">
             <Link to="/import"><Button className="w-full justify-start" variant="default"><Send className="h-4 w-4 mr-2" /> Importer un fichier Excel</Button></Link>
-            <Link to="/leads"><Button className="w-full justify-start" variant="outline"><Flame className="h-4 w-4 mr-2" /> Consulter les leads chauds</Button></Link>
+            <Link to="/prospects"><Button className="w-full justify-start" variant="outline"><Flame className="h-4 w-4 mr-2" /> Consulter les leads chauds</Button></Link>
             <Link to="/configuration"><Button className="w-full justify-start" variant="outline"><MessagesSquare className="h-4 w-4 mr-2" /> Configurer les relances</Button></Link>
           </div>
           <div className="mt-4 rounded-lg p-3 text-xs" style={{ background: "var(--gradient-gold)", color: "var(--gold-foreground)" }}>

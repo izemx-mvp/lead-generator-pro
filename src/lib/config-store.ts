@@ -2,8 +2,8 @@ import { useEffect, useState } from "react";
 
 export type JourConfig = {
   actif: boolean;
-  debut: string; // "09:00"
-  fin: string;   // "19:00"
+  debut: string;
+  fin: string;
 };
 
 export type AppConfig = {
@@ -11,24 +11,13 @@ export type AppConfig = {
     delaiPremiereHeures: number;
     nombreMax: number;
     intervalleHeures: number;
-    templateWhatsapp: string;
-    templateEmail: string;
   };
   plages: {
     fuseau: string;
     jours: Record<"lun" | "mar" | "mer" | "jeu" | "ven" | "sam" | "dim", JourConfig>;
   };
   script: {
-    q1: string;
-    q2: string;
-    q3: string;
-    q4: string;
-  };
-  canaux: {
-    expediteurEmail: string;
-    signatureEmail: string;
-    nomWhatsapp: string;
-    disclaimer: string;
+    questions: string[];
   };
 };
 
@@ -37,10 +26,6 @@ export const defaultConfig: AppConfig = {
     delaiPremiereHeures: 24,
     nombreMax: 3,
     intervalleHeures: 48,
-    templateWhatsapp:
-      "Bonjour {{prenom}}, je me permets de revenir vers vous concernant votre bien immobilier. Auriez-vous un instant pour échanger ? 🏡",
-    templateEmail:
-      "Bonjour {{prenom}},\n\nJe reviens vers vous suite à mon précédent message concernant l'estimation gratuite de votre bien.\nSeriez-vous disponible pour un rapide échange ?\n\nBien cordialement,\nL'équipe Naïma AI",
   },
   plages: {
     fuseau: "Europe/Brussels",
@@ -55,28 +40,28 @@ export const defaultConfig: AppConfig = {
     },
   },
   script: {
-    q1: "Êtes-vous propriétaire d'un bien immobilier que vous envisagez de vendre ?",
-    q2: "Vivez-vous dans ce bien depuis plus de 10 ans ?",
-    q3: "Votre projet de vente est-il prévu dans moins de 6 mois ?",
-    q4: "Seriez-vous d'accord pour qu'une agence réalise une estimation gratuite de votre bien ?",
-  },
-  canaux: {
-    expediteurEmail: "naima@agence.ai",
-    signatureEmail: "L'équipe Naïma AI — Prospection Immobilière",
-    nomWhatsapp: "Naïma AI",
-    disclaimer:
-      "Conformément au RGPD, vous pouvez à tout moment demander la suppression de vos données en répondant STOP.",
+    questions: [
+      "Êtes-vous propriétaire d'un bien immobilier que vous envisagez de vendre ?",
+      "Vivez-vous dans ce bien depuis plus de 10 ans ?",
+      "Votre projet de vente est-il prévu dans moins de 6 mois ?",
+      "Seriez-vous d'accord pour qu'une agence réalise une estimation gratuite de votre bien ?",
+    ],
   },
 };
 
-const KEY = "naima-config-v1";
+const KEY = "naima-config-v2";
 
 export function loadConfig(): AppConfig {
   if (typeof window === "undefined") return defaultConfig;
   try {
     const raw = localStorage.getItem(KEY);
     if (!raw) return defaultConfig;
-    return { ...defaultConfig, ...JSON.parse(raw) };
+    const parsed = JSON.parse(raw);
+    return {
+      ...defaultConfig,
+      ...parsed,
+      script: { questions: parsed?.script?.questions ?? defaultConfig.script.questions },
+    };
   } catch {
     return defaultConfig;
   }
