@@ -14,7 +14,7 @@ import { Clock, CalendarClock, MessagesSquare, Save, RefreshCw, Plus, Trash2, Gr
 import { toast } from "sonner";
 
 export const Route = createFileRoute("/configuration")({
-  head: () => ({ meta: [{ title: "Configuration — Naïma AI" }] }),
+  head: () => ({ meta: [{ title: "Configuration — Vendra AI" }] }),
   component: ConfigurationPage,
 });
 

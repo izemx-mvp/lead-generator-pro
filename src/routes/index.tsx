@@ -8,7 +8,7 @@ import { Area, AreaChart, CartesianGrid, ResponsiveContainer, Tooltip, XAxis, YA
 import { ArrowUpRight, MessageSquare, Send, Flame, Users, Sparkles, MessagesSquare } from "lucide-react";
 
 export const Route = createFileRoute("/")({
-  head: () => ({ meta: [{ title: "Tableau de bord — Naïma AI" }] }),
+  head: () => ({ meta: [{ title: "Tableau de bord — Vendra AI" }] }),
   component: DashboardPage,
 });
 

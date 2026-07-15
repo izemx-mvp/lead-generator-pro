@@ -12,7 +12,7 @@ import { toast } from "sonner";
 import { ArrowRight, Building2, Sparkles, Shield } from "lucide-react";
 
 export const Route = createFileRoute("/login")({
-  head: () => ({ meta: [{ title: "Connexion — Naïma AI" }] }),
+  head: () => ({ meta: [{ title: "Connexion — Vendra AI" }] }),
   component: LoginPage,
 });
 
@@ -87,7 +87,7 @@ function LoginPage() {
           </div>
 
           <div className="relative text-xs text-primary-foreground/60">
-            © 2026 Naïma AI — Tous droits réservés.
+            © 2026 Vendra AI — Tous droits réservés.
           </div>
         </div>
 

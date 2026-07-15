@@ -12,7 +12,7 @@ import { useEffect, useMemo, useState } from "react";
 import { toast } from "sonner";
 
 export const Route = createFileRoute("/prospects/")({
-  head: () => ({ meta: [{ title: "Prospects — Naïma AI" }] }),
+  head: () => ({ meta: [{ title: "Prospects — Vendra AI" }] }),
   component: ProspectsList,
 });
 

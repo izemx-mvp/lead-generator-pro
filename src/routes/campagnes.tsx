@@ -10,7 +10,7 @@ import { Rocket, Pause, Play, Users, MessageSquare, Flame, CalendarClock } from 
 import { useState } from "react";
 
 export const Route = createFileRoute("/campagnes")({
-  head: () => ({ meta: [{ title: "Campagnes IA — Naïma AI" }] }),
+  head: () => ({ meta: [{ title: "Campagnes IA — Vendra AI" }] }),
   component: CampagnesPage,
 });
 

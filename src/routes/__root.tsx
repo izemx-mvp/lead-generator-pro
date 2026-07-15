@@ -77,10 +77,10 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "Naïma AI — Prospection Immobilière" },
+      { title: "Vendra AI — Prospection Immobilière" },
       { name: "description", content: "Backoffice IA de prospection immobilière : détection de propriétaires vendeurs, qualification automatique de leads via WhatsApp et Email." },
-      { name: "author", content: "Naïma AI" },
-      { property: "og:title", content: "Naïma AI — Prospection Immobilière" },
+      { name: "author", content: "Vendra AI" },
+      { property: "og:title", content: "Vendra AI — Prospection Immobilière" },
       { property: "og:description", content: "Détection IA de propriétaires vendeurs et qualification automatique de leads pour agences immobilières BE/FR." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
