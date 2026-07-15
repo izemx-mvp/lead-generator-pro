@@ -46,6 +46,7 @@ export function AppShell({ children, title, subtitle }: { children: ReactNode; t
   const navigate = useNavigate();
   const pathname = useRouterState({ select: (r) => r.location.pathname });
   const [ready, setReady] = useState(false);
+  const [searchQ, setSearchQ] = useState("");
 
   useEffect(() => {
     if (!isAuthed()) {
@@ -60,6 +61,16 @@ export function AppShell({ children, title, subtitle }: { children: ReactNode; t
   const handleLogout = () => {
     signOut();
     navigate({ to: "/login" });
+  };
+
+  const submitSearch = (e: KeyboardEvent<HTMLInputElement>) => {
+    if (e.key !== "Enter") return;
+    const v = searchQ.trim();
+    if (!v) {
+      navigate({ to: "/prospects" });
+      return;
+    }
+    window.location.href = `/prospects?q=${encodeURIComponent(v)}`;
   };
 
   return (
@@ -119,7 +130,13 @@ export function AppShell({ children, title, subtitle }: { children: ReactNode; t
             <SidebarTrigger />
             <div className="relative hidden md:block">
               <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
-              <Input placeholder="Rechercher un prospect, une campagne…" className="pl-9 w-80 bg-background/60" />
+              <Input
+                placeholder="Rechercher un prospect, une ville…"
+                className="pl-9 w-80 bg-background/60"
+                value={searchQ}
+                onChange={(e) => setSearchQ(e.target.value)}
+                onKeyDown={submitSearch}
+              />
             </div>
             <div className="ml-auto flex items-center gap-2">
               <Badge variant="outline" className="hidden sm:inline-flex gap-1 border-success/40 bg-success/10 text-success">

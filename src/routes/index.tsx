@@ -3,7 +3,7 @@ import { AppShell } from "@/components/app-shell";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { prospects, campagnes, serieActivite, leadsQualifies } from "@/lib/mock-data";
+import { prospects, campagnes, serieActivite } from "@/lib/mock-data";
 import { Area, AreaChart, CartesianGrid, ResponsiveContainer, Tooltip, XAxis, YAxis, PieChart, Pie, Cell, Legend } from "recharts";
 import { ArrowUpRight, MessageSquare, Send, Flame, Users, Sparkles, MessagesSquare } from "lucide-react";
 
