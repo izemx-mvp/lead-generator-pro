@@ -1,4 +1,4 @@
-import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
+import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { AppShell } from "@/components/app-shell";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -7,8 +7,9 @@ import { Button } from "@/components/ui/button";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { prospects, statutLabels, statutColors, type Statut, type Canal } from "@/lib/mock-data";
-import { Search, ChevronRight, Smartphone, Mail } from "lucide-react";
-import { useMemo, useState } from "react";
+import { Search, ChevronRight, Smartphone, Mail, Download, Flame } from "lucide-react";
+import { useEffect, useMemo, useState } from "react";
+import { toast } from "sonner";
 
 export const Route = createFileRoute("/prospects/")({
   head: () => ({ meta: [{ title: "Prospects — Naïma AI" }] }),
@@ -20,6 +21,14 @@ function ProspectsList() {
   const [q, setQ] = useState("");
   const [canal, setCanal] = useState<"tous" | Canal>("tous");
   const [statut, setStatut] = useState<"tous" | Statut>("tous");
+
+  // Read ?q= from URL on mount (from header search)
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    const params = new URLSearchParams(window.location.search);
+    const v = params.get("q");
+    if (v) setQ(v);
+  }, []);
 
   const filtered = useMemo(() => {
     return prospects.filter((p) => {
@@ -38,8 +47,43 @@ function ProspectsList() {
     });
   }, [q, canal, statut]);
 
+  const qualifies = useMemo(() => prospects.filter((p) => p.statut === "qualifie"), []);
+
+  const downloadQualifies = () => {
+    const rows = [
+      ["Prénom", "Nom", "Email", "Téléphone", "Adresse", "Ville", "Pays", "Canal"],
+      ...qualifies.map((p) => [p.prenom, p.nom, p.email, p.telephone, p.adresse, p.ville, p.pays, p.canal]),
+    ];
+    const csv = rows
+      .map((r) => r.map((c) => `"${String(c).replace(/"/g, '""')}"`).join(","))
+      .join("\n");
+    const blob = new Blob(["\uFEFF" + csv], { type: "text/csv;charset=utf-8" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = `leads-qualifies-${new Date().toISOString().slice(0, 10)}.csv`;
+    a.click();
+    URL.revokeObjectURL(url);
+    toast.success("Téléchargement lancé", { description: `${qualifies.length} lead${qualifies.length > 1 ? "s" : ""} qualifié${qualifies.length > 1 ? "s" : ""} exporté${qualifies.length > 1 ? "s" : ""}.` });
+  };
+
+  const resetFilters = () => {
+    setQ("");
+    setCanal("tous");
+    setStatut("tous");
+  };
+
   return (
     <AppShell title="Prospects" subtitle={`${prospects.length} prospects au total · ${filtered.length} affichés`}>
+      <div className="mb-4 flex flex-wrap items-center justify-between gap-3">
+        <Badge variant="outline" className="gap-1 border-gold/40 bg-gold/10 text-gold-foreground">
+          <Flame className="h-3 w-3 text-gold" /> {qualifies.length} lead{qualifies.length > 1 ? "s" : ""} qualifié{qualifies.length > 1 ? "s" : ""}
+        </Badge>
+        <Button onClick={downloadQualifies} disabled={qualifies.length === 0} className="bg-gold text-gold-foreground hover:bg-gold/90">
+          <Download className="h-4 w-4 mr-2" /> Télécharger les leads qualifiés (.csv)
+        </Button>
+      </div>
+
       <Card className="glass-card p-4">
         <div className="flex flex-col md:flex-row gap-3">
           <div className="relative flex-1">
@@ -61,6 +105,7 @@ function ProspectsList() {
               {Object.entries(statutLabels).map(([k, v]) => <SelectItem key={k} value={k}>{v}</SelectItem>)}
             </SelectContent>
           </Select>
+          <Button variant="outline" onClick={resetFilters}>Réinitialiser</Button>
         </div>
       </Card>
 

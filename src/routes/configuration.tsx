@@ -10,7 +10,7 @@ import { Switch } from "@/components/ui/switch";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Badge } from "@/components/ui/badge";
 import { useConfig, joursLabels, type AppConfig } from "@/lib/config-store";
-import { Clock, MessageSquare, CalendarClock, MessagesSquare, ShieldCheck, Save, RefreshCw } from "lucide-react";
+import { Clock, CalendarClock, MessagesSquare, Save, RefreshCw, Plus, Trash2, GripVertical } from "lucide-react";
 import { toast } from "sonner";
 
 export const Route = createFileRoute("/configuration")({
@@ -23,14 +23,25 @@ function ConfigurationPage() {
 
   const save = () => toast.success("Configuration enregistrée", { description: "Vos préférences ont été mises à jour." });
 
+  const addQuestion = () =>
+    update((c) => ({ ...c, script: { questions: [...c.script.questions, "Nouvelle question ?"] } }));
+
+  const removeQuestion = (i: number) =>
+    update((c) => ({ ...c, script: { questions: c.script.questions.filter((_, idx) => idx !== i) } }));
+
+  const updateQuestion = (i: number, v: string) =>
+    update((c) => ({
+      ...c,
+      script: { questions: c.script.questions.map((q, idx) => (idx === i ? v : q)) },
+    }));
+
   return (
-    <AppShell title="Configuration" subtitle="Paramètres de relance, plages horaires, script IA et canaux de contact">
+    <AppShell title="Configuration" subtitle="Paramètres de relance, plages horaires et script IA">
       <Tabs defaultValue="relances" className="w-full">
         <TabsList className="glass-card p-1 h-auto">
           <TabsTrigger value="relances" className="gap-2"><RefreshCw className="h-3.5 w-3.5" /> Relances</TabsTrigger>
           <TabsTrigger value="plages" className="gap-2"><CalendarClock className="h-3.5 w-3.5" /> Plages horaires</TabsTrigger>
           <TabsTrigger value="script" className="gap-2"><MessagesSquare className="h-3.5 w-3.5" /> Script IA</TabsTrigger>
-          <TabsTrigger value="canaux" className="gap-2"><MessageSquare className="h-3.5 w-3.5" /> Canaux</TabsTrigger>
         </TabsList>
 
         {/* --- Relances --- */}
@@ -63,21 +74,6 @@ function ConfigurationPage() {
               />
             </div>
           </Card>
-
-          <div className="grid md:grid-cols-2 gap-4">
-            <Card className="glass-card p-6">
-              <h4 className="font-display font-semibold mb-2 flex items-center gap-2"><MessageSquare className="h-4 w-4 text-success" /> Template WhatsApp</h4>
-              <Textarea rows={6} value={config.relance.templateWhatsapp}
-                onChange={(e) => update((c) => ({ ...c, relance: { ...c.relance, templateWhatsapp: e.target.value } }))} />
-              <p className="text-xs text-muted-foreground mt-2">Variables disponibles : <code>{"{{prenom}}"}</code>, <code>{"{{ville}}"}</code></p>
-            </Card>
-            <Card className="glass-card p-6">
-              <h4 className="font-display font-semibold mb-2 flex items-center gap-2"><MessageSquare className="h-4 w-4 text-chart-1" /> Template Email</h4>
-              <Textarea rows={6} value={config.relance.templateEmail}
-                onChange={(e) => update((c) => ({ ...c, relance: { ...c.relance, templateEmail: e.target.value } }))} />
-              <p className="text-xs text-muted-foreground mt-2">Variables disponibles : <code>{"{{prenom}}"}</code>, <code>{"{{ville}}"}</code></p>
-            </Card>
-          </div>
 
           <SaveBar onSave={save} />
         </TabsContent>
@@ -121,7 +117,6 @@ function ConfigurationPage() {
             </div>
           </Card>
 
-          {/* Aperçu visuel semaine */}
           <Card className="glass-card p-6">
             <h4 className="font-display font-semibold mb-3">Aperçu de la semaine type</h4>
             <div className="relative">
@@ -154,57 +149,42 @@ function ConfigurationPage() {
         {/* --- Script --- */}
         <TabsContent value="script" className="mt-6 space-y-4">
           <Card className="glass-card p-6">
-            <h3 className="font-display text-lg font-semibold mb-1">Script de qualification IA</h3>
-            <p className="text-sm text-muted-foreground mb-6">Les 4 questions que l'IA pose à chaque prospect pour qualifier un lead.</p>
-            <div className="space-y-4">
-              {(["q1", "q2", "q3", "q4"] as const).map((k, i) => (
-                <div key={k}>
-                  <Label className="flex items-center gap-2 mb-1.5">
+            <div className="flex items-start justify-between mb-6 gap-4">
+              <div>
+                <h3 className="font-display text-lg font-semibold mb-1">Script de qualification IA</h3>
+                <p className="text-sm text-muted-foreground">Ajoutez, modifiez ou supprimez les questions que l'IA pose à chaque prospect pour qualifier un lead.</p>
+              </div>
+              <Button onClick={addQuestion} size="sm"><Plus className="h-4 w-4 mr-1" /> Ajouter une question</Button>
+            </div>
+            <div className="space-y-3">
+              {config.script.questions.map((q, i) => (
+                <div key={i} className="flex items-start gap-2 rounded-lg border border-border/60 bg-background/50 p-3">
+                  <div className="flex flex-col items-center gap-1 pt-2">
+                    <GripVertical className="h-4 w-4 text-muted-foreground" />
                     <span className="h-6 w-6 rounded-full bg-primary text-primary-foreground text-xs font-semibold flex items-center justify-center">{i + 1}</span>
-                    Question {i + 1}
-                  </Label>
-                  <Textarea rows={2} value={config.script[k]}
-                    onChange={(e) => update((c) => ({ ...c, script: { ...c.script, [k]: e.target.value } }))} />
+                  </div>
+                  <Textarea
+                    rows={2}
+                    value={q}
+                    onChange={(e) => updateQuestion(i, e.target.value)}
+                    className="flex-1"
+                  />
+                  <Button
+                    variant="ghost"
+                    size="icon"
+                    onClick={() => removeQuestion(i)}
+                    disabled={config.script.questions.length <= 1}
+                    aria-label="Supprimer"
+                    className="text-destructive hover:text-destructive"
+                  >
+                    <Trash2 className="h-4 w-4" />
+                  </Button>
                 </div>
               ))}
+              {config.script.questions.length === 0 && (
+                <div className="text-center text-sm text-muted-foreground py-6">Aucune question. Ajoutez-en une pour commencer.</div>
+              )}
             </div>
-          </Card>
-          <SaveBar onSave={save} />
-        </TabsContent>
-
-        {/* --- Canaux --- */}
-        <TabsContent value="canaux" className="mt-6 space-y-4">
-          <div className="grid md:grid-cols-2 gap-4">
-            <Card className="glass-card p-6 space-y-3">
-              <h4 className="font-display font-semibold flex items-center gap-2"><MessageSquare className="h-4 w-4 text-chart-1" /> Email</h4>
-              <div>
-                <Label>Adresse expéditeur</Label>
-                <Input value={config.canaux.expediteurEmail}
-                  onChange={(e) => update((c) => ({ ...c, canaux: { ...c.canaux, expediteurEmail: e.target.value } }))} />
-              </div>
-              <div>
-                <Label>Signature</Label>
-                <Textarea rows={3} value={config.canaux.signatureEmail}
-                  onChange={(e) => update((c) => ({ ...c, canaux: { ...c.canaux, signatureEmail: e.target.value } }))} />
-              </div>
-            </Card>
-            <Card className="glass-card p-6 space-y-3">
-              <h4 className="font-display font-semibold flex items-center gap-2"><MessageSquare className="h-4 w-4 text-success" /> WhatsApp</h4>
-              <div>
-                <Label>Nom d'expéditeur affiché</Label>
-                <Input value={config.canaux.nomWhatsapp}
-                  onChange={(e) => update((c) => ({ ...c, canaux: { ...c.canaux, nomWhatsapp: e.target.value } }))} />
-              </div>
-              <div>
-                <Label>Mention RGPD</Label>
-                <Textarea rows={3} value={config.canaux.disclaimer}
-                  onChange={(e) => update((c) => ({ ...c, canaux: { ...c.canaux, disclaimer: e.target.value } }))} />
-              </div>
-            </Card>
-          </div>
-          <Card className="glass-card p-4 flex items-center gap-3">
-            <ShieldCheck className="h-5 w-5 text-success" />
-            <div className="text-sm">Conformité RGPD active — Belgique & France. Les prospects peuvent se désinscrire à tout moment via "STOP".</div>
           </Card>
           <SaveBar onSave={save} />
         </TabsContent>

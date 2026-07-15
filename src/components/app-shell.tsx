@@ -4,14 +4,12 @@ import {
   Users,
   Upload,
   Rocket,
-  Flame,
   Settings2,
-  UserCircle2,
   LogOut,
   Bell,
   Search,
 } from "lucide-react";
-import type { ReactNode } from "react";
+import type { ReactNode, KeyboardEvent } from "react";
 import { useEffect, useState } from "react";
 import {
   Sidebar,
@@ -41,9 +39,7 @@ const items = [
   { title: "Import Excel", url: "/import", icon: Upload },
   { title: "Campagnes IA", url: "/campagnes", icon: Rocket },
   { title: "Prospects", url: "/prospects", icon: Users },
-  { title: "Leads qualifiés", url: "/leads", icon: Flame },
   { title: "Configuration", url: "/configuration", icon: Settings2 },
-  { title: "Paramètres", url: "/parametres", icon: UserCircle2 },
 ];
 
 export function AppShell({ children, title, subtitle }: { children: ReactNode; title: string; subtitle?: string }) {

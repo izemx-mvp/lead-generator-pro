@@ -9,9 +9,7 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
-import { Route as ParametresRouteImport } from './routes/parametres'
 import { Route as LoginRouteImport } from './routes/login'
-import { Route as LeadsRouteImport } from './routes/leads'
 import { Route as ImportRouteImport } from './routes/import'
 import { Route as ConfigurationRouteImport } from './routes/configuration'
 import { Route as CampagnesRouteImport } from './routes/campagnes'
@@ -19,19 +17,9 @@ import { Route as IndexRouteImport } from './routes/index'
 import { Route as ProspectsIndexRouteImport } from './routes/prospects.index'
 import { Route as ProspectsIdRouteImport } from './routes/prospects.$id'
 
-const ParametresRoute = ParametresRouteImport.update({
-  id: '/parametres',
-  path: '/parametres',
-  getParentRoute: () => rootRouteImport,
-} as any)
 const LoginRoute = LoginRouteImport.update({
   id: '/login',
   path: '/login',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const LeadsRoute = LeadsRouteImport.update({
-  id: '/leads',
-  path: '/leads',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ImportRoute = ImportRouteImport.update({
@@ -70,9 +58,7 @@ export interface FileRoutesByFullPath {
   '/campagnes': typeof CampagnesRoute
   '/configuration': typeof ConfigurationRoute
   '/import': typeof ImportRoute
-  '/leads': typeof LeadsRoute
   '/login': typeof LoginRoute
-  '/parametres': typeof ParametresRoute
   '/prospects/$id': typeof ProspectsIdRoute
   '/prospects/': typeof ProspectsIndexRoute
 }
@@ -81,9 +67,7 @@ export interface FileRoutesByTo {
   '/campagnes': typeof CampagnesRoute
   '/configuration': typeof ConfigurationRoute
   '/import': typeof ImportRoute
-  '/leads': typeof LeadsRoute
   '/login': typeof LoginRoute
-  '/parametres': typeof ParametresRoute
   '/prospects/$id': typeof ProspectsIdRoute
   '/prospects': typeof ProspectsIndexRoute
 }
@@ -93,9 +77,7 @@ export interface FileRoutesById {
   '/campagnes': typeof CampagnesRoute
   '/configuration': typeof ConfigurationRoute
   '/import': typeof ImportRoute
-  '/leads': typeof LeadsRoute
   '/login': typeof LoginRoute
-  '/parametres': typeof ParametresRoute
   '/prospects/$id': typeof ProspectsIdRoute
   '/prospects/': typeof ProspectsIndexRoute
 }
@@ -106,9 +88,7 @@ export interface FileRouteTypes {
     | '/campagnes'
     | '/configuration'
     | '/import'
-    | '/leads'
     | '/login'
-    | '/parametres'
     | '/prospects/$id'
     | '/prospects/'
   fileRoutesByTo: FileRoutesByTo
@@ -117,9 +97,7 @@ export interface FileRouteTypes {
     | '/campagnes'
     | '/configuration'
     | '/import'
-    | '/leads'
     | '/login'
-    | '/parametres'
     | '/prospects/$id'
     | '/prospects'
   id:
@@ -128,9 +106,7 @@ export interface FileRouteTypes {
     | '/campagnes'
     | '/configuration'
     | '/import'
-    | '/leads'
     | '/login'
-    | '/parametres'
     | '/prospects/$id'
     | '/prospects/'
   fileRoutesById: FileRoutesById
@@ -140,34 +116,18 @@ export interface RootRouteChildren {
   CampagnesRoute: typeof CampagnesRoute
   ConfigurationRoute: typeof ConfigurationRoute
   ImportRoute: typeof ImportRoute
-  LeadsRoute: typeof LeadsRoute
   LoginRoute: typeof LoginRoute
-  ParametresRoute: typeof ParametresRoute
   ProspectsIdRoute: typeof ProspectsIdRoute
   ProspectsIndexRoute: typeof ProspectsIndexRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
-    '/parametres': {
-      id: '/parametres'
-      path: '/parametres'
-      fullPath: '/parametres'
-      preLoaderRoute: typeof ParametresRouteImport
-      parentRoute: typeof rootRouteImport
-    }
     '/login': {
       id: '/login'
       path: '/login'
       fullPath: '/login'
       preLoaderRoute: typeof LoginRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/leads': {
-      id: '/leads'
-      path: '/leads'
-      fullPath: '/leads'
-      preLoaderRoute: typeof LeadsRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/import': {
@@ -220,9 +180,7 @@ const rootRouteChildren: RootRouteChildren = {
   CampagnesRoute: CampagnesRoute,
   ConfigurationRoute: ConfigurationRoute,
   ImportRoute: ImportRoute,
-  LeadsRoute: LeadsRoute,
   LoginRoute: LoginRoute,
-  ParametresRoute: ParametresRoute,
   ProspectsIdRoute: ProspectsIdRoute,
   ProspectsIndexRoute: ProspectsIndexRoute,
 }
