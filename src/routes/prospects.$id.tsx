@@ -10,7 +10,7 @@ import { toast } from "sonner";
 import { useState } from "react";
 
 export const Route = createFileRoute("/prospects/$id")({
-  head: () => ({ meta: [{ title: "Fiche prospect — Naïma AI" }] }),
+  head: () => ({ meta: [{ title: "Fiche prospect — Vendra AI" }] }),
   component: ProspectDetail,
   notFoundComponent: () => <div className="p-10 text-center">Prospect introuvable.</div>,
 });

@@ -13,12 +13,12 @@ export function Logo({ size = 36, withText = true }: { size?: number; withText?:
           </linearGradient>
         </defs>
         <rect x="2" y="2" width="44" height="44" rx="12" fill="url(#lg-primary)" />
-        <path d="M14 34V14h4.5l11 14V14H34v20h-4.5l-11-14v14H14z" fill="url(#lg-gold)" />
+        <path d="M13 34V14h4.2l6.8 12.4L30.8 14H35v20h-4V22.2l-5.4 9.6h-3.2L17 22.2V34h-4z" fill="url(#lg-gold)" />
         <circle cx="38" cy="10" r="3" fill="url(#lg-gold)" />
       </svg>
       {withText && (
         <div className="leading-tight">
-          <div className="font-display text-base font-semibold tracking-tight">Naïma <span className="text-gradient-gold">AI</span></div>
+          <div className="font-display text-base font-semibold tracking-tight">Vendra <span className="text-gradient-gold">AI</span></div>
           <div className="text-[10px] uppercase tracking-[0.18em] text-muted-foreground">Prospection Immo</div>
         </div>
       )}

@@ -10,7 +10,7 @@ import { useState } from "react";
 import { toast } from "sonner";
 
 export const Route = createFileRoute("/import")({
-  head: () => ({ meta: [{ title: "Import Excel — Naïma AI" }] }),
+  head: () => ({ meta: [{ title: "Import Excel — Vendra AI" }] }),
   component: ImportPage,
 });
 
